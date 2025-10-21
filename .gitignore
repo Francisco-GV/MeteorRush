@@ -1,0 +1,17 @@
+# Entorno virtual de Python
+.venv/
+venv/
+
+# Archivos de caché de Python
+__pycache__/
+*.pyc
+
+# Artefactos de distribución y empaquetado
+*.egg-info/
+
+# Configuración del editor
+.vscode/
+
+# Archivos de base de datos locales
+*.db
+*.sqlite3
