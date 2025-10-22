@@ -20,7 +20,7 @@ class Player(arcade.Sprite):
         self.left_pressed = False
         self.right_pressed = False
 
-    def update(self, _delta_time):
+    def update(self, delta_time = 1 / 60):
         self.change_x = 0
         self.change_y = 0
         self.change_angle = 0
@@ -34,12 +34,12 @@ class Player(arcade.Sprite):
         # Lógica de movimiento
         if self.up_pressed:
             angle_rad = math.radians(self.angle + 90)
-            self.change_x = -math.cos(angle_rad) * constants.PLAYER_MOVEMENT_SPEED
-            self.change_y = math.sin(angle_rad) * constants.PLAYER_MOVEMENT_SPEED
+            self.change_x = -math.cos(angle_rad) * constants.PLAYER_MOVEMENT_SPEED * delta_time
+            self.change_y = math.sin(angle_rad) * constants.PLAYER_MOVEMENT_SPEED * delta_time
         elif self.down_pressed:
             angle_rad = math.radians(self.angle + 90)
-            self.change_x = math.cos(angle_rad) * constants.PLAYER_MOVEMENT_SPEED
-            self.change_y = -math.sin(angle_rad) * constants.PLAYER_MOVEMENT_SPEED
+            self.change_x = math.cos(angle_rad) * constants.PLAYER_MOVEMENT_SPEED * delta_time
+            self.change_y = -math.sin(angle_rad) * constants.PLAYER_MOVEMENT_SPEED * delta_time
 
         self.center_x += self.change_x
         self.center_y += self.change_y
