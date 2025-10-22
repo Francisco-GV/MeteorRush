@@ -15,6 +15,9 @@ class GameView(arcade.View):
         self.up_pressed = False
         self.down_pressed = False
 
+        self.q_pressed = False
+        self.e_pressed = False
+
     def setup(self):
         self.player_list = arcade.SpriteList()
         image_source = "assets/images/player/player_ship.png"
@@ -36,6 +39,12 @@ class GameView(arcade.View):
         if self.player_sprite and self.player_list:
             self.player_sprite.change_x = 0
             self.player_sprite.change_y = 0
+            self.player_sprite.change_angle = 0
+
+            if self.q_pressed and not self.e_pressed:
+                self.player_sprite.change_angle = -constants.PLAYER_ROTATION_SPEED
+            elif self.e_pressed and not self.q_pressed:
+                self.player_sprite.change_angle = constants.PLAYER_ROTATION_SPEED
 
             if self.up_pressed and not self.down_pressed:
                 self.player_sprite.change_y = constants.PLAYER_MOVEMENT_SPEED
@@ -69,6 +78,11 @@ class GameView(arcade.View):
         elif symbol == arcade.key.RIGHT or symbol == arcade.key.D:
             self.right_pressed = True
 
+        if symbol == arcade.key.Q:
+            self.q_pressed = True
+        elif symbol == arcade.key.E:
+            self.e_pressed = True
+
     def on_key_release(self, symbol, modifiers):
         if symbol == arcade.key.UP or symbol == arcade.key.W:
             self.up_pressed = False
@@ -78,3 +92,8 @@ class GameView(arcade.View):
             self.left_pressed = False
         elif symbol == arcade.key.RIGHT or symbol == arcade.key.D:
             self.right_pressed = False
+
+        if symbol == arcade.key.Q:
+            self.q_pressed = False
+        elif symbol == arcade.key.E:
+            self.e_pressed = False
