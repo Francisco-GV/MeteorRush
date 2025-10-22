@@ -1,11 +1,19 @@
 import arcade
 
-from MeteorRush.constants import SCREEN_HEIGHT, SCREEN_TITLE, SCREEN_WIDTH
+from MeteorRush import constants
 from MeteorRush.view.menu_view import MenuView
 
 
 def main():
-    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    window = arcade.Window(
+        constants.SCREEN_WIDTH,
+        constants.SCREEN_HEIGHT,
+        constants.SCREEN_TITLE,
+    )
+    window.set_update_rate(1 / constants.MAX_FPS)
+
+    arcade.enable_timings()
+
     menu_view = MenuView()
     window.show_view(menu_view)
     arcade.run()

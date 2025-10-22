@@ -33,6 +33,15 @@ class GameView(arcade.View):
         if self.player_list:
             self.player_list.draw()
 
+        fps = arcade.get_fps()
+        arcade.draw_text(
+            f"FPS: {fps:.0f}",
+            10,
+            self.window.height - 30,
+            arcade.color.WHITE,
+            18,
+        )
+
     def on_update(self, delta_time):
         if self.player_list:
             self.player_list.update()
