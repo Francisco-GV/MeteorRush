@@ -1,3 +1,7 @@
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 768
 SCREEN_TITLE = "Meteor Rush"
+
+# --- Constantes del Jugador ---
+PLAYER_SCALING = 0.5
+PLAYER_MOVEMENT_SPEED = 5
