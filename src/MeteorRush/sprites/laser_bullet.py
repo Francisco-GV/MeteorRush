@@ -5,11 +5,13 @@ from MeteorRush import constants
 
 class LaserBullet(arcade.Sprite):
 
+    TEXTURE_PATH = "assets/images/lasers/laser_blue.png"
+
     def __init__(self):
         self.scaling = 0.8
         self.speed = 7
 
-        super().__init__("assets/images/lasers/laser_green.png", scale=self.scaling)
+        super().__init__(self.TEXTURE_PATH, scale=self.scaling)
 
     def update(self, _):
         self.center_x += self.change_x

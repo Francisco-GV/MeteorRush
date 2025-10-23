@@ -9,7 +9,13 @@ from MeteorRush.weapons.weapon import Weapon
 
 class LaserCannon(Weapon):
     def __init__(self):
-        super().__init__(damage=1, fire_rate=0.5, magazine_size=10, reload_speed=1.0)
+        super().__init__(
+            damage=1,
+            fire_rate=0.5,
+            magazine_size=10,
+            reload_speed=1.0,
+            bullet_texture_path=LaserBullet.TEXTURE_PATH,
+        )
         self.laser_sound = arcade.load_sound(Path(r"assets/sounds/lasers/laser.wav"))
 
     def fire(self, position: tuple[float, float], angle: float):

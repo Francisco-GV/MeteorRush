@@ -7,12 +7,18 @@ import arcade
 
 class Weapon(abc.ABC):
     def __init__(
-        self, damage: int, fire_rate: float, magazine_size: int, reload_speed: float
+        self,
+        damage: int,
+        fire_rate: float,
+        magazine_size: int,
+        reload_speed: float,
+        bullet_texture_path: str,
     ):
         self.damage = damage
         self.fire_rate = fire_rate
         self.magazine_size = magazine_size
         self.reload_speed = reload_speed
+        self.bullet_texture_path = bullet_texture_path
 
         self.current_ammo = magazine_size
         self.cooldown_timer = 0.0
