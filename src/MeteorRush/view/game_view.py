@@ -12,6 +12,7 @@ class GameView(arcade.View):
         super().__init__()
         self.player = None
         self.player_list = None
+        self.bullet_list = None
 
         self.up_pressed = False
         self.down_pressed = False
@@ -22,6 +23,7 @@ class GameView(arcade.View):
     def setup(self):
         self.player = Player()
         self.player_list = arcade.SpriteList()
+        self.bullet_list = arcade.SpriteList()
         self.player_list.append(self.player)
 
     def on_show_view(self):
@@ -30,21 +32,25 @@ class GameView(arcade.View):
 
     def on_draw(self):
         self.clear()
+
+        if self.bullet_list:
+            self.bullet_list.draw()
+
         if self.player_list:
             self.player_list.draw()
-
-        fps = arcade.get_fps()
-        arcade.draw_text(
-            f"FPS: {fps:.0f}",
-            10,
-            self.window.height - 30,
-            arcade.color.WHITE,
-            18,
-        )
 
     def on_update(self, delta_time):
         if self.player_list:
             self.player_list.update()
+
+        if self.player and self.player.is_shooting:
+            bullet = self.player.weapon.fire(self.player.position, self.player.angle)
+            if bullet and self.bullet_list is not None:
+                self.bullet_list.append(bullet)
+
+        if self.bullet_list:
+            self.bullet_list.update(delta_time)
+
 
     def on_key_press(self, symbol, modifiers):
         if self.player:
@@ -58,6 +64,9 @@ class GameView(arcade.View):
             elif symbol == arcade.key.RIGHT or symbol == arcade.key.D:
                 self.player.right_pressed = True
 
+            if symbol == arcade.key.SPACE:
+                self.player.is_shooting = True
+
     def on_key_release(self, symbol, modifiers):
         if self.player:
             if symbol == arcade.key.UP or symbol == arcade.key.W:
@@ -69,3 +78,6 @@ class GameView(arcade.View):
                 self.player.left_pressed = False
             elif symbol == arcade.key.RIGHT or symbol == arcade.key.D:
                 self.player.right_pressed = False
+
+            if symbol == arcade.key.SPACE:
+                self.player.is_shooting = False

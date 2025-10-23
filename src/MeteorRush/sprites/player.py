@@ -3,6 +3,7 @@ import math
 import arcade
 
 from MeteorRush import constants
+from MeteorRush.weapons.laser_cannon import LaserCannon
 
 
 class Player(arcade.Sprite):
@@ -15,12 +16,17 @@ class Player(arcade.Sprite):
         self.center_x = constants.SCREEN_WIDTH / 2
         self.center_y = 50
 
+        self.weapon = LaserCannon()
+        self.is_shooting = False
+
         self.up_pressed = False
         self.down_pressed = False
         self.left_pressed = False
         self.right_pressed = False
 
     def update(self, delta_time = 1 / 60):
+        self.weapon.update(delta_time)
+
         self.change_x = 0
         self.change_y = 0
         self.change_angle = 0
