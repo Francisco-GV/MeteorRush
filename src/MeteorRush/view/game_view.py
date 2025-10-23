@@ -13,6 +13,7 @@ class GameView(arcade.View):
         self.player = None
         self.player_list = None
         self.bullet_list = None
+        self.ammo_texture = None
 
         self.up_pressed = False
         self.down_pressed = False
@@ -26,6 +27,11 @@ class GameView(arcade.View):
         self.bullet_list = arcade.SpriteList()
         self.player_list.append(self.player)
 
+        if self.player:
+            self.ammo_texture = arcade.load_texture(
+                self.player.weapon.bullet_texture_path
+            )
+
     def on_show_view(self):
         arcade.set_background_color(arcade.color.AMAZON)
         self.setup()
@@ -38,6 +44,40 @@ class GameView(arcade.View):
 
         if self.player_list:
             self.player_list.draw()
+
+        if self.player and self.ammo_texture:
+            ammo_start_x = self.ammo_texture.width + 15
+            ammo_start_y = self.ammo_texture.height + 5
+            ammo_spacing = 15
+            ammo_scale = 0.8
+
+            scaled_width = self.ammo_texture.width * ammo_scale
+            scaled_height = self.ammo_texture.height * ammo_scale
+
+            for i in range(self.player.weapon.current_ammo):
+                center_x = ammo_start_x + i * ammo_spacing
+                center_y = ammo_start_y
+                bottom_left_x = center_x - (scaled_width / 2)
+                bottom_left_y = center_y - (scaled_height / 2)
+
+                arcade.draw_texture_rect(
+                    texture=self.ammo_texture,
+                    rect=arcade.XYWH(
+                        x=bottom_left_x,
+                        y=bottom_left_y,
+                        width=scaled_width,
+                        height=scaled_height,
+                    ),
+                )
+
+        fps = arcade.get_fps()
+        arcade.draw_text(
+            f"FPS: {fps:.0f}",
+            10,
+            self.window.height - 30,
+            arcade.color.WHITE,
+            18,
+        )
 
     def on_update(self, delta_time):
         if self.player_list:

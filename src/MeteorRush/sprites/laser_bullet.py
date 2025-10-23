@@ -5,7 +5,7 @@ from MeteorRush import constants
 
 class LaserBullet(arcade.Sprite):
 
-    TEXTURE_PATH = "assets/images/lasers/laser_blue.png"
+    TEXTURE_PATH = "assets/images/lasers/laser_green.png"
 
     def __init__(self):
         self.scaling = 0.8
