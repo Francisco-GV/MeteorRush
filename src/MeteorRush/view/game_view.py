@@ -54,7 +54,10 @@ class GameView(arcade.View):
             scaled_width = self.ammo_texture.width * ammo_scale
             scaled_height = self.ammo_texture.height * ammo_scale
 
-            for i in range(self.player.weapon.current_ammo):
+            weapon = self.player.weapon
+
+            i = 0
+            while i < weapon.magazine_size:
                 center_x = ammo_start_x + i * ammo_spacing
                 center_y = ammo_start_y
                 bottom_left_x = center_x - (scaled_width / 2)
@@ -68,7 +71,10 @@ class GameView(arcade.View):
                         width=scaled_width,
                         height=scaled_height,
                     ),
+                    alpha=255 if i < weapon.current_ammo else 100
                 )
+
+                i += 1
 
         fps = arcade.get_fps()
         arcade.draw_text(
