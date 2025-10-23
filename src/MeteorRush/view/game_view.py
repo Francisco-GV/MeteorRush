@@ -14,6 +14,7 @@ class GameView(arcade.View):
         self.player_list = None
         self.bullet_list = None
         self.ammo_texture = None
+        self.background = None
 
         self.up_pressed = False
         self.down_pressed = False
@@ -32,12 +33,20 @@ class GameView(arcade.View):
                 self.player.weapon.bullet_texture_path
             )
 
+        self.background = arcade.load_texture("assets/images/backgrounds/space_background.png")
+
     def on_show_view(self):
         arcade.set_background_color(arcade.color.AMAZON)
         self.setup()
 
     def on_draw(self):
         self.clear()
+
+        if self.background:
+            arcade.draw_texture_rect(
+                self.background,
+                arcade.LBWH(0, 0, constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT)
+            )
 
         if self.bullet_list:
             self.bullet_list.draw()
