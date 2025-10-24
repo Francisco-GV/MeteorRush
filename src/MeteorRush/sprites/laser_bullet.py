@@ -7,9 +7,10 @@ class LaserBullet(arcade.Sprite):
 
     TEXTURE_PATH = "assets/images/lasers/laser_green.png"
 
-    def __init__(self):
+    def __init__(self, damage):
         self.scaling = 0.8
         self.speed = 7
+        self.damage = damage
 
         super().__init__(self.TEXTURE_PATH, scale=self.scaling)
 

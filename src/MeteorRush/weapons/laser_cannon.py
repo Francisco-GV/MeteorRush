@@ -28,7 +28,7 @@ class LaserCannon(Weapon):
             if self.laser_sound:
                 arcade.play_sound(self.laser_sound)
 
-            bullet = LaserBullet()
+            bullet = LaserBullet(damage=self.damage)
             bullet.center_x = position[0]
             bullet.center_y = position[1]
             bullet.angle = angle
