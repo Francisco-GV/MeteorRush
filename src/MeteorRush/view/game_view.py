@@ -130,6 +130,8 @@ class GameView(arcade.View):
         if self.bullet_list:
             self.bullet_list.update(delta_time)
 
+        self._handle_collisions()
+
     def _spawn_asteroid(self):
         image_path = "assets/images/asteroids/asteroid.png"
         asteroid = Asteroid(image_path, constants.ASTEROID_SCALING)
@@ -152,6 +154,21 @@ class GameView(arcade.View):
 
         if self.asteroid_list is not None:
             self.asteroid_list.append(asteroid)
+
+    def _handle_collisions(self):
+        if self.asteroid_list and not self.bullet_list:
+            for bullet in self.bullet_list:
+                hit_list = arcade.check_for_collision_with_list(
+                    sprite=bullet, sprite_list=self.asteroid_list
+                )
+
+                if hit_list:
+                    bullet.remove_from_sprite_lists()
+
+                    for asteroid in hit_list:
+                        asteroid.current_health -= bullet.damage
+                        if asteroid.current_health <= 0:
+                            asteroid.remove_from_sprite_lists()
 
     def on_key_press(self, symbol, modifiers):
         if self.player:
