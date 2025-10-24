@@ -35,6 +35,7 @@ class GameView(arcade.View):
         self.player_health_bar = None
 
         self.timer = 0.0
+        self.death_timer = 0.0
 
         self.up_pressed = False
         self.down_pressed = False
@@ -244,6 +245,9 @@ class GameView(arcade.View):
         if delta_time > 0.1:
             delta_time = 0.1
 
+        if self.death_timer > 3:
+            self.finalizar_juego()
+
         difficulty_factor = min(self.timer / self.difficulty_target_time, 1.0)
 
         new_weights = []
@@ -263,6 +267,8 @@ class GameView(arcade.View):
 
         if self.player and self.player.is_alive:
             self.timer += delta_time
+        elif self.player:
+            self.death_timer += delta_time
 
         if self.player_list:
             self.player_list.update()
@@ -380,6 +386,11 @@ class GameView(arcade.View):
 
                         self.player.remove_from_sprite_lists()
                         self.player.is_alive = False
+
+    def finalizar_juego(self):
+        from MeteorRush.view.menu_view import MenuView
+        menu_view = MenuView()
+        self.window.show_view(menu_view)
 
     def on_key_press(self, symbol, modifiers):
         if self.player and self.player.is_alive:
