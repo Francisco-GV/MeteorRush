@@ -3,7 +3,7 @@ from arcade.gui import (UIAnchorLayout, UIBoxLayout, UIFlatButton, UILabel,
                         UIManager)
 
 from MeteorRush.utils import scale_and_center_background
-from MeteorRush.view.game_view import GameView
+from MeteorRush.view.register_view import RegisterView
 
 
 class MenuView(arcade.View):
@@ -59,8 +59,8 @@ class MenuView(arcade.View):
         self.manager.disable()
 
     def on_click_start(self, event):
-        game_view = GameView()
-        self.window.show_view(game_view)
+        name_input_view = RegisterView()
+        self.window.show_view(name_input_view)
 
     def on_click_quit(self, event):
         arcade.exit()
