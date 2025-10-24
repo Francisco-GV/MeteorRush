@@ -12,6 +12,8 @@ def main():
     )
     window.set_update_rate(1 / constants.MAX_FPS)
 
+    arcade.load_font(":resources:/fonts/ttf/Kenney/Kenney_Future.ttf")
+
     arcade.enable_timings()
 
     menu_view = MenuView()
