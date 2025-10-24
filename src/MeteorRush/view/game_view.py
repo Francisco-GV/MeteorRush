@@ -55,6 +55,12 @@ class GameView(arcade.View):
         self.text_fps = None
         self.first_update = True
 
+        self.asteroid_types = [LargeAsteroid, MediumAsteroid, SmallAsteroid, TinyAsteroid]
+        self.initial_spawn_weights = [50, 30, 15, 5]
+        self.final_spawn_weights = [5, 15, 40, 40]
+        self.current_spawn_weights = self.initial_spawn_weights.copy()
+        self.difficulty_target_time = 60.0
+
     def setup(self):
         self.player = Player()
         self.player_list = arcade.SpriteList()
@@ -209,6 +215,17 @@ class GameView(arcade.View):
         if delta_time > 0.1:
             delta_time = 0.1
 
+        difficulty_factor = min(self.timer / self.difficulty_target_time, 1.0)
+
+        new_weights = []
+        for i in range(len(self.asteroid_types)):
+            initial_w = self.initial_spawn_weights[i]
+            final_w = self.final_spawn_weights[i]
+            current_w = initial_w + (final_w - initial_w) * difficulty_factor
+            new_weights.append(current_w)
+
+        self.current_spawn_weights = new_weights
+
         if self.player and self.player.is_alive:
             self.timer += delta_time
 
@@ -237,19 +254,11 @@ class GameView(arcade.View):
         self._handle_collisions()
 
     def _spawn_asteroid(self):
+        chosen_class = random.choices(
+            self.asteroid_types, weights=self.current_spawn_weights, k=1
+        )[0]
 
-        asteroid = None
-        asteroid_type = random.choice(["tiny", "small", "medium", "large"])
-
-        match (asteroid_type):
-            case "tiny":
-                asteroid = TinyAsteroid()
-            case "small":
-                asteroid = SmallAsteroid()
-            case "medium":
-                asteroid = MediumAsteroid()
-            case "large":
-                asteroid = LargeAsteroid()
+        asteroid = chosen_class()
 
         side = random.choice(["top", "bottom", "left", "right"])
 
