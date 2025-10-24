@@ -2,14 +2,27 @@ import arcade
 from arcade.gui import (UIAnchorLayout, UIBoxLayout, UIFlatButton, UILabel,
                         UIManager)
 
+from MeteorRush.utils import scale_and_center_background
 from MeteorRush.view.game_view import GameView
 
 
 class MenuView(arcade.View):
+    def __init__(self):
+        super().__init__()
+
+        self.background_list = None
+        self.setup()
+
+    def setup(self):
+        self.background_list = arcade.SpriteList()
+
+        background_sprite = scale_and_center_background(
+            "assets/images/backgrounds/Green_Nebula_07-1024x1024.png"
+        )
+
+        self.background_list.append(background_sprite)
 
     def on_show_view(self):
-        arcade.set_background_color(arcade.color.DARK_MIDNIGHT_BLUE)
-
         self.manager = UIManager()
         self.manager.enable()
 
@@ -54,4 +67,8 @@ class MenuView(arcade.View):
 
     def on_draw(self):
         self.clear()
+
+        if self.background_list:
+            self.background_list.draw()
+
         self.manager.draw()
