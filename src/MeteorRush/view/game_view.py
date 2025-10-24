@@ -28,6 +28,8 @@ class GameView(arcade.View):
 
         self.player_health_bar = None
 
+        self.timer = 0.0
+
         self.up_pressed = False
         self.down_pressed = False
 
@@ -46,6 +48,7 @@ class GameView(arcade.View):
 
         self.asteroid_spawn_timer = 0.0
 
+        self.text_timer = 0.0
         self.text_fps = None
         self.first_update = True
 
@@ -114,6 +117,14 @@ class GameView(arcade.View):
         self.player_hit_sound = arcade.load_sound("assets/sounds/explosions/explosionCrunch_000.wav")
         self.player_explosion_sound = arcade.load_sound("assets/sounds/explosions/explosionCrunch_001.wav")
 
+        self.text_timer = arcade.Text(
+            "",
+            x=constants.SCREEN_WIDTH / 2,
+            anchor_x="center",
+            y=constants.SCREEN_HEIGHT - 50,
+            color=arcade.color.WHITE,
+            font_size=28,
+        )
         self.text_fps = arcade.Text(
             "",
             x=constants.SCREEN_WIDTH - 50,
@@ -178,6 +189,10 @@ class GameView(arcade.View):
         if self.player_health_bar and self.player:
             self.player_health_bar.draw(self.player.current_health)
 
+        if self.text_timer:
+            self.text_timer.text = f"{self.timer:,.2f}s"
+            self.text_timer.draw()
+
         if self.text_fps:
             fps = arcade.get_fps()
             self.text_fps.text = f"FPS: {fps:.0f}"
@@ -190,6 +205,9 @@ class GameView(arcade.View):
 
         if delta_time > 0.1:
             delta_time = 0.1
+
+        if self.player and self.player.is_alive:
+            self.timer += delta_time
 
         if self.player_list:
             self.player_list.update()
