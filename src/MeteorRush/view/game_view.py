@@ -4,7 +4,10 @@ import random
 import arcade
 
 from MeteorRush import constants
-from MeteorRush.asteroids.asteroid import Asteroid
+from MeteorRush.asteroids.large_asteroid import LargeAsteroid
+from MeteorRush.asteroids.medium_asteroid import MediumAsteroid
+from MeteorRush.asteroids.small_asteroid import SmallAsteroid
+from MeteorRush.asteroids.tiny_asteroid import TinyAsteroid
 from MeteorRush.effects.explosion import Explosion
 from MeteorRush.sprites.player import Player
 from MeteorRush.util.textures import load_textures_from_spritesheet
@@ -234,8 +237,19 @@ class GameView(arcade.View):
         self._handle_collisions()
 
     def _spawn_asteroid(self):
-        image_path = "assets/images/asteroids/asteroid.png"
-        asteroid = Asteroid(image_path, constants.ASTEROID_SCALING)
+
+        asteroid = None
+        asteroid_type = random.choice(["tiny", "small", "medium", "large"])
+
+        match (asteroid_type):
+            case "tiny":
+                asteroid = TinyAsteroid()
+            case "small":
+                asteroid = SmallAsteroid()
+            case "medium":
+                asteroid = MediumAsteroid()
+            case "large":
+                asteroid = LargeAsteroid()
 
         side = random.choice(["top", "bottom", "left", "right"])
 
