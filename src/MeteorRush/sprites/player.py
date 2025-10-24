@@ -21,6 +21,7 @@ class Player(arcade.Sprite):
 
         self.weapon = LaserCannon()
         self.is_shooting = False
+        self.is_alive = True
 
         self.up_pressed = False
         self.down_pressed = False

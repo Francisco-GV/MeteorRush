@@ -194,7 +194,7 @@ class GameView(arcade.View):
                 self._spawn_asteroid()
                 self.asteroid_spawn_timer = 0.0
 
-        if self.player and self.player.is_shooting:
+        if self.player and self.player.is_alive and self.player.is_shooting:
             bullet = self.player.weapon.fire(self.player.position, self.player.angle)
             if bullet and self.bullet_list is not None:
                 self.bullet_list.append(bullet)
@@ -262,7 +262,7 @@ class GameView(arcade.View):
 
                             asteroid.remove_from_sprite_lists()
 
-        if self.player and self.asteroid_list:
+        if self.player and self.player.is_alive and self.asteroid_list:
             hit_list = arcade.check_for_collision_with_list(
                 sprite=self.player, sprite_list=self.asteroid_list
             )
@@ -290,9 +290,10 @@ class GameView(arcade.View):
                         self.explosion_list.append(explosion)
 
                         self.player.remove_from_sprite_lists()
+                        self.player.is_alive = False
 
     def on_key_press(self, symbol, modifiers):
-        if self.player:
+        if self.player and self.player.is_alive:
             if symbol == arcade.key.UP or symbol == arcade.key.W:
                 self.player.up_pressed = True
             elif symbol == arcade.key.DOWN or symbol == arcade.key.S:
