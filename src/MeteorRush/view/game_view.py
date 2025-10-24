@@ -10,6 +10,7 @@ from MeteorRush.sprites.player import Player
 from MeteorRush.util.textures import load_textures_from_spritesheet
 from MeteorRush.utils import scale_and_center_background
 
+from MeteorRush.components.bar import Bar
 
 class GameView(arcade.View):
 
@@ -24,6 +25,8 @@ class GameView(arcade.View):
         self.background_list = None
         self.ammo_texture = None
         self.background = None
+
+        self.player_health_bar = None
 
         self.up_pressed = False
         self.down_pressed = False
@@ -50,6 +53,17 @@ class GameView(arcade.View):
         self.asteroid_list = arcade.SpriteList()
         self.explosion_list = arcade.SpriteList()
         self.background_list = arcade.SpriteList()
+
+        health_bar_height = 25
+        health_bar_width = 20
+        health_bar_margin = 20
+        self.player_health_bar = Bar(
+            self.player.max_health,
+            x=health_bar_margin,
+            y=self.window.height - health_bar_height - health_bar_margin,
+            width=health_bar_width,
+            height=health_bar_height,
+        )
 
         self.player_list.append(self.player)
 
@@ -150,6 +164,9 @@ class GameView(arcade.View):
                 )
 
                 i += 1
+
+        if self.player_health_bar and self.player:
+            self.player_health_bar.draw(self.player.current_health)
 
         fps = arcade.get_fps()
         arcade.draw_text(
