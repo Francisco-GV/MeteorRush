@@ -11,6 +11,10 @@ class Asteroid(arcade.Sprite):
     def __init__(self, image_path: str, scale: float):
         super().__init__(image_path, scale)
 
+        self.max_health = 3
+        self.current_health = self.max_health
+        self.collision_damage = 3
+
         self.speed = random.uniform(
             constants.ASTEROID_MIN_SPEED, constants.ASTEROID_MAX_SPEED
         )

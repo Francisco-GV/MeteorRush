@@ -13,6 +13,9 @@ class Player(arcade.Sprite):
             scale=constants.PLAYER_SCALING,
         )
 
+        self.max_health = 10
+        self.current_health = self.max_health
+
         self.center_x = constants.SCREEN_WIDTH / 2
         self.center_y = 50
 
