@@ -46,6 +46,8 @@ class GameView(arcade.View):
 
         self.asteroid_spawn_timer = 0.0
 
+        self.text_fps = None
+
     def setup(self):
         self.player = Player()
         self.player_list = arcade.SpriteList()
@@ -111,6 +113,13 @@ class GameView(arcade.View):
         self.player_hit_sound = arcade.load_sound("assets/sounds/explosions/explosionCrunch_000.wav")
         self.player_explosion_sound = arcade.load_sound("assets/sounds/explosions/explosionCrunch_001.wav")
 
+        self.text_fps = arcade.Text(
+            "",
+            x=constants.SCREEN_WIDTH - 50,
+            y=10,
+            color=arcade.color.WHITE,
+            font_size=10,
+        )
 
     def on_show_view(self):
         arcade.set_background_color(arcade.color.AMAZON)
@@ -168,14 +177,10 @@ class GameView(arcade.View):
         if self.player_health_bar and self.player:
             self.player_health_bar.draw(self.player.current_health)
 
-        fps = arcade.get_fps()
-        arcade.draw_text(
-            f"FPS: {fps:.0f}",
-            10,
-            self.window.height - 30,
-            arcade.color.WHITE,
-            18,
-        )
+        if self.text_fps:
+            fps = arcade.get_fps()
+            self.text_fps.text = f"FPS: {fps:.0f}"
+            self.text_fps.draw()
 
     def on_update(self, delta_time):
         if self.player_list:
