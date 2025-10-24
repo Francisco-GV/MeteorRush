@@ -1,12 +1,20 @@
+import random
 from MeteorRush.asteroids.asteroid import Asteroid
 from MeteorRush import constants
 
 
 class LargeAsteroid(Asteroid):
 
-    IMAGE_PATH = "assets/images/asteroids/meteorBrown_big1.png"
+    IMAGE_PATHS = (
+        "assets/images/asteroids/meteorBrown_big1.png",
+        "assets/images/asteroids/meteorBrown_big2.png",
+        "assets/images/asteroids/meteorBrown_big3.png",
+        "assets/images/asteroids/meteorBrown_big4.png",
+    )
 
     def __init__(self):
+        IMAGE_PATH = random.choice(self.IMAGE_PATHS)
+
         super().__init__(
             max_health=constants.ASTEROID_BIG_MAX_HEALTH,
             collision_damage=constants.ASTEROID_BIG_COLLISION_DAMAGE,
@@ -18,6 +26,6 @@ class LargeAsteroid(Asteroid):
                 constants.ASTEROID_BIG_ROTATION_SPEED_MIN,
                 constants.ASTEROID_BIG_ROTATION_SPEED_MAX,
             ),
-            image_path=self.IMAGE_PATH,
+            image_path=IMAGE_PATH,
             scale=constants.ASTEROID_BIG_SCALING,
         )
