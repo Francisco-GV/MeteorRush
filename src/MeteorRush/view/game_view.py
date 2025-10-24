@@ -156,7 +156,7 @@ class GameView(arcade.View):
             self.asteroid_list.append(asteroid)
 
     def _handle_collisions(self):
-        if self.asteroid_list and not self.bullet_list:
+        if self.asteroid_list and self.bullet_list:
             for bullet in self.bullet_list:
                 hit_list = arcade.check_for_collision_with_list(
                     sprite=bullet, sprite_list=self.asteroid_list
@@ -169,6 +169,19 @@ class GameView(arcade.View):
                         asteroid.current_health -= bullet.damage
                         if asteroid.current_health <= 0:
                             asteroid.remove_from_sprite_lists()
+
+        if self.player and self.asteroid_list:
+            hit_list = arcade.check_for_collision_with_list(
+                sprite=self.player, sprite_list=self.asteroid_list
+            )
+
+            if hit_list:
+                for asteroid in hit_list:
+                    self.player.current_health -= asteroid.collision_damage
+                    asteroid.remove_from_sprite_lists()
+
+                    if self.player.current_health <= 0:
+                        self.player.remove_from_sprite_lists()
 
     def on_key_press(self, symbol, modifiers):
         if self.player:
