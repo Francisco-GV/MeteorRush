@@ -4,6 +4,7 @@ import arcade
 
 from MeteorRush import constants
 from MeteorRush.sprites.player import Player
+from MeteorRush.utils import scale_and_center_background
 
 
 class GameView(arcade.View):
@@ -13,6 +14,7 @@ class GameView(arcade.View):
         self.player = None
         self.player_list = None
         self.bullet_list = None
+        self.background_list = None
         self.ammo_texture = None
         self.background = None
 
@@ -26,6 +28,8 @@ class GameView(arcade.View):
         self.player = Player()
         self.player_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
+        self.background_list = arcade.SpriteList()
+
         self.player_list.append(self.player)
 
         if self.player:
@@ -33,7 +37,10 @@ class GameView(arcade.View):
                 self.player.weapon.bullet_texture_path
             )
 
-        self.background = arcade.load_texture("assets/images/backgrounds/space_background.png")
+        background_sprite = scale_and_center_background(
+            "assets/images/backgrounds/space_background.png"
+        )
+        self.background_list.append(background_sprite)
 
     def on_show_view(self):
         arcade.set_background_color(arcade.color.AMAZON)
@@ -42,11 +49,8 @@ class GameView(arcade.View):
     def on_draw(self):
         self.clear()
 
-        if self.background:
-            arcade.draw_texture_rect(
-                self.background,
-                arcade.LBWH(0, 0, constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT)
-            )
+        if self.background_list:
+            self.background_list.draw()
 
         if self.bullet_list:
             self.bullet_list.draw()
