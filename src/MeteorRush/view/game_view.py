@@ -36,6 +36,11 @@ class GameView(arcade.View):
         self.player_hit_textures = []
         self.player_explosion_textures = []
 
+        self.asteroid_hit_sound = None
+        self.asteroid_explosion_sound = None
+        self.player_hit_sound = None
+        self.player_explosion_sound = None
+
         self.asteroid_spawn_timer = 0.0
 
     def setup(self):
@@ -86,6 +91,12 @@ class GameView(arcade.View):
             columns=9,
             count=60,
         )
+
+        self.asteroid_hit_sound = arcade.load_sound("assets/sounds/explosions/lowFrequency_explosion_001.wav")
+        self.asteroid_explosion_sound = arcade.load_sound("assets/sounds/explosions/explosionCrunch_004.wav")
+        self.player_hit_sound = arcade.load_sound("assets/sounds/explosions/explosionCrunch_000.wav")
+        self.player_explosion_sound = arcade.load_sound("assets/sounds/explosions/explosionCrunch_001.wav")
+
 
     def on_show_view(self):
         arcade.set_background_color(arcade.color.AMAZON)
@@ -212,6 +223,8 @@ class GameView(arcade.View):
                             self.asteroid_hit_textures,
                             asteroid.center_x,
                             asteroid.center_y,
+                            sound=self.asteroid_hit_sound,
+                            sound_conf=dict(volume=0.25),
                         )
                         self.explosion_list.append(explosion)
 
@@ -221,6 +234,7 @@ class GameView(arcade.View):
                                 self.asteroid_explosion_textures,
                                 asteroid.center_x,
                                 asteroid.center_y,
+                                sound=self.asteroid_explosion_sound,
                             )
                             self.explosion_list.append(explosion)
 
@@ -238,6 +252,7 @@ class GameView(arcade.View):
                         self.player_hit_textures,
                         asteroid.center_x,
                         asteroid.center_y,
+                        sound=self.player_hit_sound,
                     )
                     self.explosion_list.append(explosion)
 
@@ -248,6 +263,7 @@ class GameView(arcade.View):
                             self.player_explosion_textures,
                             self.player.center_x,
                             self.player.center_y,
+                            sound=self.player_explosion_sound,
                         )
                         self.explosion_list.append(explosion)
 
