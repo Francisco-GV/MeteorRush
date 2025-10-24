@@ -47,6 +47,7 @@ class GameView(arcade.View):
         self.asteroid_spawn_timer = 0.0
 
         self.text_fps = None
+        self.first_update = True
 
     def setup(self):
         self.player = Player()
@@ -183,6 +184,13 @@ class GameView(arcade.View):
             self.text_fps.draw()
 
     def on_update(self, delta_time):
+        if self.first_update:
+            self.first_update = False
+            return
+
+        if delta_time > 0.1:
+            delta_time = 0.1
+
         if self.player_list:
             self.player_list.update()
 
