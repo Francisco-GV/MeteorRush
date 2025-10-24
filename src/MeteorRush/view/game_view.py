@@ -1,8 +1,10 @@
 import math
+import random
 
 import arcade
 
 from MeteorRush import constants
+from MeteorRush.asteroids.asteroid import Asteroid
 from MeteorRush.sprites.player import Player
 from MeteorRush.utils import scale_and_center_background
 
@@ -14,6 +16,7 @@ class GameView(arcade.View):
         self.player = None
         self.player_list = None
         self.bullet_list = None
+        self.asteroid_list = None
         self.background_list = None
         self.ammo_texture = None
         self.background = None
@@ -24,13 +27,19 @@ class GameView(arcade.View):
         self.left_pressed = False
         self.right_pressed = False
 
+        self.asteroid_spawn_timer = 0.0
+
     def setup(self):
         self.player = Player()
         self.player_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
+        self.asteroid_list = arcade.SpriteList()
         self.background_list = arcade.SpriteList()
 
         self.player_list.append(self.player)
+
+        for _ in range(constants.ASTEROID_INITIAL_COUNT):
+            self._spawn_asteroid()
 
         if self.player:
             self.ammo_texture = arcade.load_texture(
@@ -51,6 +60,9 @@ class GameView(arcade.View):
 
         if self.background_list:
             self.background_list.draw()
+
+        if self.asteroid_list:
+            self.asteroid_list.draw()
 
         if self.bullet_list:
             self.bullet_list.draw()
@@ -102,6 +114,14 @@ class GameView(arcade.View):
         if self.player_list:
             self.player_list.update()
 
+        if self.asteroid_list:
+            self.asteroid_list.update()
+
+            self.asteroid_spawn_timer += delta_time
+            if self.asteroid_spawn_timer >= constants.ASTEROID_SPAWN_INTERVAL:
+                self._spawn_asteroid()
+                self.asteroid_spawn_timer = 0.0
+
         if self.player and self.player.is_shooting:
             bullet = self.player.weapon.fire(self.player.position, self.player.angle)
             if bullet and self.bullet_list is not None:
@@ -110,6 +130,28 @@ class GameView(arcade.View):
         if self.bullet_list:
             self.bullet_list.update(delta_time)
 
+    def _spawn_asteroid(self):
+        image_path = "assets/images/asteroids/asteroid.png"
+        asteroid = Asteroid(image_path, constants.ASTEROID_SCALING)
+
+        side = random.choice(["top", "bottom", "left", "right"])
+
+        match (side):
+            case "top":
+                asteroid.center_x = random.uniform(0, constants.SCREEN_WIDTH)
+                asteroid.bottom = constants.SCREEN_HEIGHT
+            case "bottom":
+                asteroid.center_x = random.uniform(0, constants.SCREEN_WIDTH)
+                asteroid.top = 0
+            case "left":
+                asteroid.center_y = random.uniform(0, constants.SCREEN_HEIGHT)
+                asteroid.right = 0
+            case "right":
+                asteroid.center_y = random.uniform(0, constants.SCREEN_HEIGHT)
+                asteroid.left = constants.SCREEN_WIDTH
+
+        if self.asteroid_list is not None:
+            self.asteroid_list.append(asteroid)
 
     def on_key_press(self, symbol, modifiers):
         if self.player:
