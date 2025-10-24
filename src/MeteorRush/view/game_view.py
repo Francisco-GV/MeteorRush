@@ -5,7 +5,9 @@ import arcade
 
 from MeteorRush import constants
 from MeteorRush.asteroids.asteroid import Asteroid
+from MeteorRush.effects.explosion import Explosion
 from MeteorRush.sprites.player import Player
+from MeteorRush.util.textures import load_textures_from_spritesheet
 from MeteorRush.utils import scale_and_center_background
 
 
@@ -17,6 +19,8 @@ class GameView(arcade.View):
         self.player_list = None
         self.bullet_list = None
         self.asteroid_list = None
+
+        self.explosion_list = None
         self.background_list = None
         self.ammo_texture = None
         self.background = None
@@ -27,6 +31,9 @@ class GameView(arcade.View):
         self.left_pressed = False
         self.right_pressed = False
 
+        self.asteroid_hit_textures = []
+        self.asteroid_explosion_textures = []
+
         self.asteroid_spawn_timer = 0.0
 
     def setup(self):
@@ -34,6 +41,7 @@ class GameView(arcade.View):
         self.player_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
         self.asteroid_list = arcade.SpriteList()
+        self.explosion_list = arcade.SpriteList()
         self.background_list = arcade.SpriteList()
 
         self.player_list.append(self.player)
@@ -50,6 +58,19 @@ class GameView(arcade.View):
             "assets/images/backgrounds/space_background.png"
         )
         self.background_list.append(background_sprite)
+
+        self.asteroid_hit_textures = load_textures_from_spritesheet(
+            "assets/spritesheets/Effect_Impact_1_305x383.png",
+            sprite_size=(305, 383),
+            columns=9,
+            count=60,
+        )
+        self.asteroid_explosion_textures = load_textures_from_spritesheet(
+            "assets/spritesheets/Effect_Explosion_1_517x517.png",
+            sprite_size=(517, 517),
+            columns=9,
+            count=60,
+        )
 
     def on_show_view(self):
         arcade.set_background_color(arcade.color.AMAZON)
@@ -69,6 +90,9 @@ class GameView(arcade.View):
 
         if self.player_list:
             self.player_list.draw()
+
+        if self.explosion_list:
+            self.explosion_list.draw()
 
         if self.player and self.ammo_texture:
             ammo_start_x = self.ammo_texture.width + 15
@@ -130,6 +154,9 @@ class GameView(arcade.View):
         if self.bullet_list:
             self.bullet_list.update(delta_time)
 
+        if self.explosion_list:
+            self.explosion_list.update(delta_time)
+
         self._handle_collisions()
 
     def _spawn_asteroid(self):
@@ -166,8 +193,22 @@ class GameView(arcade.View):
                     bullet.remove_from_sprite_lists()
 
                     for asteroid in hit_list:
+                        explosion = Explosion(
+                            self.asteroid_hit_textures,
+                            asteroid.center_x,
+                            asteroid.center_y,
+                        )
+                        self.explosion_list.append(explosion)
+
                         asteroid.current_health -= bullet.damage
                         if asteroid.current_health <= 0:
+                            explosion = Explosion(
+                                self.asteroid_explosion_textures,
+                                asteroid.center_x,
+                                asteroid.center_y,
+                            )
+                            self.explosion_list.append(explosion)
+
                             asteroid.remove_from_sprite_lists()
 
         if self.player and self.asteroid_list:
