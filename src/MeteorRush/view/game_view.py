@@ -18,7 +18,10 @@ from MeteorRush.components.bar import Bar
 class GameView(arcade.View):
 
     def __init__(self):
+
         super().__init__()
+
+        self.player_name = "Player"
         self.player = None
         self.player_list = None
         self.bullet_list = None
@@ -142,21 +145,25 @@ class GameView(arcade.View):
             y=constants.SCREEN_HEIGHT - 50,
             color=arcade.color.WHITE,
             font_size=28,
+            font_name="Kenney Future",
         )
         self.text_fps = arcade.Text(
             "",
-            x=constants.SCREEN_WIDTH - 50,
+            x=constants.SCREEN_WIDTH - 20,
             y=10,
             color=arcade.color.WHITE,
+            anchor_x="right",
             font_size=10,
+            font_name="Kenney Future",
         )
         self.text_score = arcade.Text(
             "Score: 0",
-            x=constants.SCREEN_WIDTH - 50,
+            x=constants.SCREEN_WIDTH - 20,
             y=constants.SCREEN_HEIGHT - 50,
             color=arcade.color.WHITE,
             anchor_x="right",
             font_size=20,
+            font_name="Kenney Future",
         )
 
     def on_show_view(self):
