@@ -4,6 +4,8 @@ from MeteorRush import constants
 
 
 class TinyAsteroid(Asteroid):
+    SCORE_VALUE = 100
+    TYPE_NAME = "tiny"
 
     IMAGE_PATHS = (
         "assets/images/asteroids/meteorBrown_tiny1.png",

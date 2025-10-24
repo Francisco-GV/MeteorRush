@@ -55,6 +55,11 @@ class GameView(arcade.View):
         self.text_fps = None
         self.first_update = True
 
+        self.score = 0
+        self.score_by_asteroid_type = {"tiny": 0, "small": 0, "medium": 0, "large": 0}
+        self.destroyed_asteroid_counts = {"tiny": 0, "small": 0, "medium": 0, "large": 0}
+        self.text_score = None
+
         self.asteroid_types = [LargeAsteroid, MediumAsteroid, SmallAsteroid, TinyAsteroid]
         self.initial_spawn_weights = [50, 30, 15, 5]
         self.final_spawn_weights = [5, 15, 40, 40]
@@ -145,6 +150,13 @@ class GameView(arcade.View):
             color=arcade.color.WHITE,
             font_size=10,
         )
+        self.text_score = arcade.Text(
+            "Score: 0",
+            x=15,
+            y=50,
+            color=arcade.color.WHITE,
+            font_size=20,
+        )
 
     def on_show_view(self):
         arcade.set_background_color(arcade.color.AMAZON)
@@ -210,6 +222,11 @@ class GameView(arcade.View):
             fps = arcade.get_fps()
             self.text_fps.text = f"FPS: {fps:.0f}"
             self.text_fps.draw()
+
+        if self.text_score is not None:
+            live_score = self.score + int(self.timer * 10)
+            self.text_score.text = f"Score: {live_score}"
+            self.text_score.draw()
 
     def on_update(self, delta_time):
         if self.first_update:
@@ -311,6 +328,11 @@ class GameView(arcade.View):
 
                         asteroid.current_health -= bullet.damage
                         if asteroid.current_health <= 0:
+                            asteroid_type = asteroid.TYPE_NAME
+                            self.score += asteroid.SCORE_VALUE
+                            self.destroyed_asteroid_counts[asteroid_type] += 1
+                            self.score_by_asteroid_type[asteroid_type] += asteroid.SCORE_VALUE
+
                             explosion = Explosion(
                                 self.asteroid_explosion_textures,
                                 asteroid.center_x,
