@@ -33,6 +33,8 @@ class GameView(arcade.View):
 
         self.asteroid_hit_textures = []
         self.asteroid_explosion_textures = []
+        self.player_hit_textures = []
+        self.player_explosion_textures = []
 
         self.asteroid_spawn_timer = 0.0
 
@@ -68,6 +70,19 @@ class GameView(arcade.View):
         self.asteroid_explosion_textures = load_textures_from_spritesheet(
             "assets/spritesheets/Effect_Explosion_1_517x517.png",
             sprite_size=(517, 517),
+            columns=9,
+            count=60,
+        )
+        self.player_hit_textures = load_textures_from_spritesheet(
+            "assets/spritesheets/Effect_PuffAndStars_1_108x116.png",
+            sprite_size=(108, 116),
+            columns=10,
+            count=80,
+        )
+
+        self.player_explosion_textures = load_textures_from_spritesheet(
+            "assets/spritesheets/Effect_Explosion2_1_355x365.png",
+            sprite_size=(355, 365),
             columns=9,
             count=60,
         )
@@ -219,9 +234,23 @@ class GameView(arcade.View):
             if hit_list:
                 for asteroid in hit_list:
                     self.player.current_health -= asteroid.collision_damage
+                    explosion = Explosion(
+                        self.player_hit_textures,
+                        asteroid.center_x,
+                        asteroid.center_y,
+                    )
+                    self.explosion_list.append(explosion)
+
                     asteroid.remove_from_sprite_lists()
 
                     if self.player.current_health <= 0:
+                        explosion = Explosion(
+                            self.player_explosion_textures,
+                            self.player.center_x,
+                            self.player.center_y,
+                        )
+                        self.explosion_list.append(explosion)
+
                         self.player.remove_from_sprite_lists()
 
     def on_key_press(self, symbol, modifiers):
