@@ -61,6 +61,10 @@ class GameView(arcade.View):
         self.current_spawn_weights = self.initial_spawn_weights.copy()
         self.difficulty_target_time = 60.0
 
+        self.initial_spawn_interval = 5.0
+        self.final_spawn_interval = 0.75
+        self.current_spawn_interval = self.initial_spawn_interval
+
     def setup(self):
         self.player = Player()
         self.player_list = arcade.SpriteList()
@@ -226,6 +230,12 @@ class GameView(arcade.View):
 
         self.current_spawn_weights = new_weights
 
+        self.current_spawn_interval = (
+            self.initial_spawn_interval
+            + (self.final_spawn_interval - self.initial_spawn_interval)
+            * difficulty_factor
+        )
+
         if self.player and self.player.is_alive:
             self.timer += delta_time
 
@@ -236,7 +246,7 @@ class GameView(arcade.View):
             self.asteroid_list.update()
 
             self.asteroid_spawn_timer += delta_time
-            if self.asteroid_spawn_timer >= constants.ASTEROID_SPAWN_INTERVAL:
+            if self.asteroid_spawn_timer >= self.current_spawn_interval:
                 self._spawn_asteroid()
                 self.asteroid_spawn_timer = 0.0
 
