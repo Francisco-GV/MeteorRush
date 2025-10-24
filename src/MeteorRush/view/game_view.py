@@ -152,9 +152,10 @@ class GameView(arcade.View):
         )
         self.text_score = arcade.Text(
             "Score: 0",
-            x=15,
-            y=50,
+            x=constants.SCREEN_WIDTH - 50,
+            y=constants.SCREEN_HEIGHT - 50,
             color=arcade.color.WHITE,
+            anchor_x="right",
             font_size=20,
         )
 
