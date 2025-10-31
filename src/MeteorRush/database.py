@@ -1,12 +1,14 @@
 import pyodbc
 
+from MeteorRush import settings
+
 
 class Database:
-    def __init__(self, server, database, user, password):
-        self.server = server
-        self.database = database
-        self.user = user
-        self.password = password
+    def __init__(self):
+        self.server = settings.DB_SERVER
+        self.database = settings.DB_DATABASE
+        self.user = settings.DB_USER
+        self.password = settings.DB_PASSWORD
         self.cnxn = None
         self.cursor = None
 
