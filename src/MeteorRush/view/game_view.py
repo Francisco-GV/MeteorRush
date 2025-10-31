@@ -14,6 +14,7 @@ from MeteorRush.util.textures import load_textures_from_spritesheet
 from MeteorRush.utils import scale_and_center_background
 
 from MeteorRush.components.bar import Bar
+from MeteorRush.database import Database
 
 class GameView(arcade.View):
 
@@ -388,6 +389,13 @@ class GameView(arcade.View):
                         self.player.is_alive = False
 
     def finalizar_juego(self):
+        with Database() as db:
+            db.upload_player_data(
+                self.player_name,
+                self.score,
+                self.timer,
+                self.destroyed_asteroid_counts,
+            )
         from MeteorRush.view.menu_view import MenuView
         menu_view = MenuView()
         self.window.show_view(menu_view)
